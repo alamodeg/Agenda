@@ -11,7 +11,6 @@ namespace Agenda
     {
         static void Main()
         {
-            List<Persona> listadoContactos = new List<Persona>();
             int opcion;
             do
             {
@@ -35,7 +34,8 @@ namespace Agenda
                         Helper.EditarContacto();
                         break;
                     case 3:
-                        //eliminar
+                        Console.Clear();
+                        Helper.EliminarContacto();
                         break;
                     case 4:
                         Console.Clear();

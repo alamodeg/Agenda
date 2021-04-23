@@ -34,6 +34,7 @@ namespace Agenda
             {
                 Console.WriteLine("No se encontro el archivo");
             }
+            Console.WriteLine("\nPresiona cualquier tecla para continuar");
             Console.ReadKey();
         }
 
@@ -53,7 +54,7 @@ namespace Agenda
                     Console.WriteLine("Ingrese la edad"); string edad = Console.ReadLine();
                     Console.WriteLine("Ingrese el celular"); string cel = Console.ReadLine();
                     writer.WriteLine($"{nomb},{app},{edad},{cel}");
-                    Console.WriteLine("CONTACTO AGENDADO! Presiona una tecla para continuar..");
+                    Console.WriteLine("CONTACTO AGENDADO! Presiona una tecla para continuar..\n");
                     Console.ReadKey();
                 }
             }
@@ -69,7 +70,6 @@ namespace Agenda
         public static void EditarContacto()
         {
             string respuesta;
-            
             string ruta = "Contactos.txt";
             string ruta_aux = "temp.txt";
 
@@ -121,9 +121,64 @@ namespace Agenda
                     }
                 }
             }
-            File.Delete(ruta); //para poder copiar a mi viejo archivo
-            File.Copy(ruta_aux,ruta);
-            File.Delete(ruta_aux); //borro el auxiliar
+            File.Delete(ruta);
+            File.Move(ruta_aux, ruta); //renombro el temporal para que sea el actual
+        }
+
+        /// <summary>
+        /// Abre un archivo en modo escritura y elimina un contacto
+        /// </summary>
+        public static void EliminarContacto()
+        {
+            string respuesta;
+            string ruta = "Contactos.txt";
+            string ruta_aux = "temp.txt";
+
+            Console.WriteLine("********* ELIMINACION DE CONTACTO *********\n");
+            Console.WriteLine("Ingrese el apellido del contacto que desea eliminar(respetar Mayus)..");
+            var viejo_ap = Console.ReadLine();
+
+            using (StreamReader reader = new StreamReader(ruta))
+            {
+                string linea = reader.ReadLine();
+                while (linea != null)
+                {
+                    string[] separador = linea.Split(',');
+                    if (separador[1].Equals(viejo_ap))
+                    {
+                        Console.WriteLine("USUARIO ENCONTRADO! posee los siguientes datos: \n");
+                        Console.WriteLine($"Nombre: {separador[0]} || Apellido: {separador[1]} || Edad: {separador[2]} || Cel: {separador[3]}");
+                        Console.WriteLine("¿Desea eliminar este contacto(si/no)?\n");
+                        respuesta = Console.ReadLine();
+
+                        if (respuesta.Equals("si"))
+                        {
+                            string nuevo_ap = Console.ReadLine();
+                            linea = reader.ReadLine();
+                            Console.WriteLine("Eliminacion exitosa..");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            using (StreamWriter writer = new StreamWriter(ruta_aux, true))
+                            {
+                                writer.WriteLine(linea);
+                            }
+                            linea = reader.ReadLine();
+                        }
+                    }
+                    else
+                    {
+                        using (StreamWriter writer = new StreamWriter(ruta_aux, true))
+                        {
+                            writer.WriteLine(linea);
+                        }
+                        linea = reader.ReadLine();
+                    }
+                }
+            }
+            File.Delete(ruta);
+            File.Move(ruta_aux, ruta); //renombro el temporal para que sea el actual
         }
     }
 }

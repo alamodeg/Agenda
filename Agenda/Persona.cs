@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Agenda
 {
-    //revisar el public
-    public class Persona
+    class Persona
     {
         string nombre;
         string apellido;
